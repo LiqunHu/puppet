@@ -21,7 +21,8 @@ try:
 except Exception as e:
     print("{}\n请先在命令行下运行：pip install pyperclip，再使用puppet！".format(e))
 
-MSG = {'WM_SETTEXT': 12,
+MSG = {'WM_SETFOCUS': 7,
+       'WM_SETTEXT': 12,
        'WM_GETTEXT': 13,
        'WM_CLOSE': 16,
        'WM_KEYDOWN': 256,
@@ -31,7 +32,10 @@ MSG = {'WM_SETTEXT': 12,
        'CB_GETCOUNT': 326,
        'CB_SETCURSEL': 334,
        'CBN_SELCHANGE': 1,
-       'COPY': 57634}
+       'COPY': 57634,
+       'F1': 112,
+       'F2': 113,
+       'F3': 114}
 
 user32 = ctypes.windll.user32
 
@@ -402,6 +406,8 @@ class Client:
                 r = user32.SendDlgItemMessageW(hParent, idEditor, MSG['WM_SETTEXT'], 0, text)
             else:
                 r = user32.SendMessageW(hEdit, MSG['WM_SETTEXT'], 0, text)
+                sr = user32.SendMessageW(hEdit, MSG['WM_SETFOCUS'], 0, 0)
+                
         return self
 
     def click_button(self, hDialog=None, label='确定', idButton=None):
