@@ -77,8 +77,8 @@ class Client:
         'account': (59392, 0, 1711),
         'balance': (1038,),
         'table': (1047, 200, 1047),
-        'buy2': (3451, 1032, 1541, 1033, 1018, 1034), # 交易市场|证券代码|委托策略|买入价格|可买|买入数量
-        'sell2':(3453, 1035, 1542, 1058, 1019, 1039),
+        'buy2': (3451, 1032, 1541, 1541, 1033, 1018, 1034), # 交易市场|证券代码|委托策略|买入价格|可买|买入数量
+        'sell2':(3453, 1035, 1542, 1542, 1058, 1019, 1039),
         'cancel_order': (3348,)
     }
     PAGE = 59648, 59649
@@ -206,7 +206,7 @@ class Client:
         """
         label = {'buy2': '买入[B]', 'sell2': '卖出[S]'}.get(action)
         self.members = self.excute(action)
-        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fill(arg)._text()
+        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(1).wait(.3).switch_way(0).wait(.3).fill(arg)._text()
         self.fill(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
         self.capture()
@@ -241,7 +241,8 @@ class Client:
         return self.capture()
 
     def cancel_all(self): # 全撤
-        return self.cancel_order()
+        self.cancel_order()
+        return self.answer()
 
     def cancel_buy(self): # 撤买
         self.cancel_order(choice='cancel_buy')
@@ -422,10 +423,8 @@ class Client:
             if hParent and idEditor:
                 r = user32.SendDlgItemMessageW(hParent, idEditor, MSG['WM_SETTEXT'], 0, text)
             else:
-                sr = user32.SendMessageW(hEdit, MSG['WM_SETFOCUS'], 0, 0) # for huatai
                 r = user32.SendMessageW(hEdit, MSG['WM_SETTEXT'], 0, text)
-                ssr = user32.SendMessageW(hEdit, MSG['WM_KILLFOCUS'], 0, 0) # for huatai
-                
+                sr = user32.SendMessageW(hEdit, MSG['WM_SETFOCUS'], 0, 0) # for huatai
         return self
 
     def click_button(self, hDialog=None, label='确定', idButton=None):
