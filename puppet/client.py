@@ -222,19 +222,20 @@ class Client:
                 hButton = user32.FindWindowExW(hDialog, 0, 'Button', '撤单')
                 if user32.IsWindowEnabled(hButton): # 撤单按钮的状态检查
                     break
-        return self.click_button(hDialog, label={'cancel': '撤单',
+        self.click_button(hDialog, label={'cancel': '撤单',
                                                  'cancel_all': '全撤(Z /)',
                                                  'cancel_buy': '撤买(X)',
-                                                 'cancel_sell': '撤卖(C)'}[choice]).answer()
+                                                 'cancel_sell': '撤卖(C)'}[choice])
+        return self.capture()
 
     def cancel_all(self): # 全撤
         return self.cancel_order()
 
     def cancel_buy(self): # 撤买
-        return self.cancel_order(choice='cancel_buy')
+        return self.cancel_order(choice='cancel_buy').answer()
 
     def cancel_sell(self): # 撤卖
-        return self.cancel_order(choice='cancel_sell')
+        return self.cancel_order(choice='cancel_sell').answer()
 
     def raffle(self):
         "新股申购"
