@@ -36,7 +36,18 @@ MSG = {'WM_SETFOCUS': 7,
        'COPY': 57634,
        'F1': 112,
        'F2': 113,
-       'F3': 114}
+       'F3': 114,
+       '0': 49,
+       '1': 50,
+       '2': 51,
+       '3': 52,
+       '4': 53,
+       '5': 54,
+       '6': 55,
+       '7': 56,
+       '8': 57,
+       '9': 58
+       }
 
 user32 = ctypes.windll.user32
 
@@ -195,7 +206,7 @@ class Client:
         """
         label = {'buy2': '买入[B]', 'sell2': '卖出[S]'}.get(action)
         self.members = self.excute(action)
-        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fill(arg)._text()
+        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fillWithKey(arg)._text()
         self.fill(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
         self.capture()
@@ -416,6 +427,11 @@ class Client:
                 ssr = user32.SendMessageW(hEdit, MSG['WM_KILLFOCUS'], 0, 0) # for huatai
                 
         return self
+    
+    def fillWithKey(self, text):
+        hEdit = next(self.members)
+        for c in text:
+            self.click_key(hEdit, MSG[c])
 
     def click_button(self, hDialog=None, label='确定', idButton=None):
         hDialog = hDialog or next(self.members)
