@@ -412,6 +412,7 @@ class Client:
             else:
                 r = user32.SendMessageW(hEdit, MSG['WM_SETTEXT'], 0, text)
                 sr = user32.SendMessageW(hEdit, MSG['WM_SETFOCUS'], 0, 0)
+                usr = user32.SendMessageW(hEdit, MSG['WM_KILLFOCUS'], 0, 0)
                 
         return self
 
