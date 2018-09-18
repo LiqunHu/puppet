@@ -232,10 +232,12 @@ class Client:
         return self.cancel_order()
 
     def cancel_buy(self): # 撤买
-        return self.cancel_order(choice='cancel_buy').answer()
+        self.cancel_order(choice='cancel_buy')
+        return self.answer()
 
     def cancel_sell(self): # 撤卖
-        return self.cancel_order(choice='cancel_sell').answer()
+        self.cancel_order(choice='cancel_sell')
+        return self.answer()
 
     def raffle(self):
         "新股申购"
