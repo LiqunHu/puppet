@@ -195,7 +195,9 @@ class Client:
         label = {'buy2': '买入[B]', 'sell2': '卖出[S]'}.get(action)
         self.members = self.excute(action)
         full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fill(arg)._text()
-        self.fill(qty if qty else full).click_button(label=label).if_fund(symbol, arg)
+        self.fill(qty if qty else full).click_button(label=label)
+        # self.if_fund(symbol, arg)
+        self.capture()
         return self
 
     def buy(self, symbol, arg, qty):
