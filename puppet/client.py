@@ -22,6 +22,7 @@ except Exception as e:
     print("{}\n请先在命令行下运行：pip install pyperclip，再使用puppet！".format(e))
 
 MSG = {'WM_SETFOCUS': 7,
+       'WM_KILLFOCUS': 8,
        'WM_SETTEXT': 12,
        'WM_GETTEXT': 13,
        'WM_CLOSE': 16,
@@ -194,8 +195,8 @@ class Client:
         """
         label = {'buy2': '买入[B]', 'sell2': '卖出[S]'}.get(action)
         self.members = self.excute(action)
-        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fill(arg)._text()
-        self.fill(qty if qty else full).click_button(label=label)
+        full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(arg).fillwithfocus(arg)._text()
+        self.fillwithfocus(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
         self.capture()
         return self
@@ -411,7 +412,20 @@ class Client:
                 r = user32.SendDlgItemMessageW(hParent, idEditor, MSG['WM_SETTEXT'], 0, text)
             else:
                 r = user32.SendMessageW(hEdit, MSG['WM_SETTEXT'], 0, text)
+                
+        return self
+    
+    def fillwithfocus(self, text, editor=None, hParent=None, idEditor=None):
+        "fill in"
+        hEdit = editor or next(self.members)
+        if text not in (1, 2, 3, 4, 5):
+            text = str(text)
+            if hParent and idEditor:
+                r = user32.SendDlgItemMessageW(hParent, idEditor, MSG['WM_SETTEXT'], 0, text)
+            else:
+                r = user32.SendMessageW(hEdit, MSG['WM_SETTEXT'], 0, text)
                 sr = user32.SendMessageW(hEdit, MSG['WM_SETFOCUS'], 0, 0) # for huatai
+                sr = user32.SendMessageW(hEdit, MSG['WM_KILLFOCUS'], 0, 0) # for huatai
                 
         return self
 
