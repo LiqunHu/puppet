@@ -210,7 +210,11 @@ class Client:
         self.fill(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
         msginfo = self.getPopInfo()
-        self.capture()
+        if msginfo.find(symbol) >-1 && msginfo.find(arg) >-1 && msginfo.find(qty) >-1:
+            self.capture('否(&N)')
+        else:
+            self.capture('否(&N)')
+            self.trade(action, symbol, arg, qty)
         return self
 
     def buy(self, symbol, arg, qty):
