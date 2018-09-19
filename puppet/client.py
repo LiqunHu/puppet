@@ -214,7 +214,7 @@ class Client:
         self.fill(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
         msginfo = self.getPopInfo()
-        if (msginfo.find(symbol) > -1 and msginfo.find(arg) > -1 and msginfo.find(qty) > -1 and msginfo.find('限价委托')) > -1:
+        if (msginfo.find(symbol) > -1 and msginfo.find(arg) > -1 and msginfo.find(qty) > -1 and msginfo.find('限价委托') > -1):
             self.capture()
         else:
             self.capture(label='否(&N)')
