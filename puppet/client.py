@@ -505,7 +505,7 @@ class Client:
                 while hTips is not None:
                     hTips = user32.FindWindowExW(hPopup, hTips, 'Static', None)
                     user32.SendMessageW(hTips, MSG['WM_GETTEXT'], 64, buf)
-                    if(buf.value.find('股东账号') > 0):
+                    if(buf.value.find('股东') > 0):
                         return buf.value
         return '未找到关键信息'
 
