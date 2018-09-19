@@ -502,7 +502,7 @@ class Client:
             self.wait(0.1)
             hPopup = user32.GetLastActivePopup(self.root)
             hTips = 0
-            if hPopup != self. and self.visible(hPopup):
+            if hPopup != self.root and self.visible(hPopup):
                 while hTips is not None:
                     hTips = user32.FindWindowExW(hPopup, hTips, 'Static', None)
                     user32.SendMessageW(hTips, MSG['WM_GETTEXT'], 64, buf)
