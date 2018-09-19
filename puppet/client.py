@@ -496,8 +496,7 @@ class Client:
         return text if text else '木偶:"没有回应"'
     
     def getPopInfo(self):
-        message = []
-        buf = ctypes.create_unicode_buffer(64)
+        buf = ctypes.create_unicode_buffer(4000)
         for n in range(10):
             self.wait(0.1)
             hPopup = user32.GetLastActivePopup(self.root)
@@ -506,8 +505,10 @@ class Client:
                 while hTips is not None:
                     hTips = user32.FindWindowExW(hPopup, hTips, 'Static', None)
                     user32.SendMessageW(hTips, MSG['WM_GETTEXT'], 64, buf)
-                    message.append(buf.value)
-        return message
+                    if(buf.value.find('股东账号')):
+                        break
+        text = buf.value
+        return text if text else '未找到关键信息'
 
     def answer(self):
         text = self.capture()
