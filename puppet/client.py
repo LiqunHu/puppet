@@ -209,6 +209,7 @@ class Client:
         full = self.switch_mkt(symbol).fill(symbol).wait(.3).switch_way(1).wait(.3).switch_way(0).wait(.3).fill(arg)._text()
         self.fill(qty if qty else full).click_button(label=label)
         # self.if_fund(symbol, arg)
+        msginfo = self.getPopInfo()
         self.capture()
         return self
 
@@ -493,6 +494,20 @@ class Client:
                 break
         text = buf.value
         return text if text else '木偶:"没有回应"'
+    
+    def getPopInfo(self):
+        message = []
+        buf = ctypes.create_unicode_buffer(64)
+        for n in range(10):
+            self.wait(0.1)
+            hPopup = user32.GetLastActivePopup(self.root)
+            hTips = 0
+            if hPopup != self. and self.visible(hPopup):
+                while hTips is not None:
+                    hTips = user32.FindWindowExW(hPopup, hTips, 'Static', None)
+                    user32.SendMessageW(hTips, MSG['WM_GETTEXT'], 64, buf)
+                    message.append(buf.value)
+        return message
 
     def answer(self):
         text = self.capture()
